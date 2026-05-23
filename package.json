@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "echo 'Vercel PHP build - skip Vite'",
+        "build": "echo 'Skip build'",
         "dev": "vite"
     },
     "devDependencies": {
