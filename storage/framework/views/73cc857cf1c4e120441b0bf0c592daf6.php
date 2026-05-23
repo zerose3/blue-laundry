@@ -3,9 +3,9 @@
         <div class="flex justify-between items-center h-20">
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-water text-white text-lg"></i>
-                </div>
+                <img src="<?php echo e(asset('images/blue_laundry_logo.svg')); ?>"
+                     alt="Blue Laundry Logo"
+                     width="40" height="40">
                 <span class="font-bold text-xl tracking-tight text-slate-800 dark:text-white">
                     Blue <span class="text-primary-600 dark:text-primary-400">Laundry</span>
                 </span>
@@ -85,5 +85,4 @@
             navbar.classList.remove('shadow-lg');
         }
     });
-</script>
-<?php /**PATH C:\laragon\www\blue-laundry\resources\views/components/navbar.blade.php ENDPATH**/ ?>
+</script><?php /**PATH C:\laragon\www\blue-laundry\resources\views/components/navbar.blade.php ENDPATH**/ ?>

@@ -1,0 +1,29 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="128" height="128" rx="22" fill="#E1F5EE"/>
+
+  <!-- Tetes air besar (atas) -->
+  <path d="M64 14 C64 14 38 48 38 66 C38 80.5 49.5 92 64 92 C78.5 92 90 80.5 90 66 C90 48 64 14 64 14Z"
+        stroke="#0F6E56" stroke-width="4.5" fill="#0F6E56" fill-opacity="0.12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Gelombang dalam tetes -->
+  <path d="M46 66 Q55 59 64 66 Q73 73 82 66"
+        stroke="#0F6E56" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <!-- Bubble kecil -->
+  <circle cx="50" cy="50" r="4" stroke="#0F6E56" stroke-width="3" fill="none"/>
+  <circle cx="72" cy="44" r="3.5" stroke="#0F6E56" stroke-width="3" fill="none"/>
+
+  <!-- Garis pemisah -->
+  <line x1="18" y1="98" x2="110" y2="98" stroke="#0F6E56" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.35"/>
+
+  <!-- Setrika (bawah) -->
+  <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M108 122 L101 98 L34 98 C29 98 27 101 25 106 L20 122 Z"
+        stroke="#0F6E56" stroke-width="4.5" fill="#0F6E56" fill-opacity="0.12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Pegangan setrika -->
+  <path d="M101 98 L97 84 L78 84"
+        stroke="#0F6E56" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Uap -->
+  <path d="M36 92 Q38 86 36 80" stroke="#0F6E56" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M50 92 Q52 84 50 76" stroke="#0F6E56" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M64 92 Q66 86 64 80" stroke="#0F6E56" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
+</svg>

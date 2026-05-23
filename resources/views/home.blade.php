@@ -132,24 +132,33 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @php
             $services = [
-                ['name' => 'Cuci Kering Reguler', 'price' => '8.000', 'unit' => 'kg', 'desc' => 'Layanan standar 24 jam', 'icon' => 'fa-soap', 'color' => 'blue'],
-                ['name' => 'Cuci Kering Express', 'price' => '15.000', 'unit' => 'kg', 'desc' => 'Kilat 6 jam selesai', 'icon' => 'fa-bolt', 'color' => 'amber'],
-                ['name' => 'Cuci Setrika', 'price' => '12.000', 'unit' => 'kg', 'desc' => 'Bersih + Rapi', 'icon' => 'fa-shirt', 'color' => 'emerald'],
-                ['name' => 'Setrika Saja', 'price' => '6.000', 'unit' => 'kg', 'desc' => 'Setrika pakaian', 'icon' => 'fa-fire', 'color' => 'purple'],
-                ['name' => 'Dry Cleaning', 'price' => '25.000', 'unit' => 'kg', 'desc' => 'Untuk pakaian premium', 'icon' => 'fa-star', 'color' => 'rose'],
-                ['name' => 'Cuci Sepatu', 'price' => '35.000', 'unit' => 'pcs', 'desc' => 'Bersih seperti baru', 'icon' => 'fa-shoe-prints', 'color' => 'orange'],
+                ['name' => 'Cuci Kering Reguler', 'price' => '8.000', 'unit' => 'kg', 'desc' => 'Layanan standar 24 jam', 'icon' => 'fa-soap', 'color' => 'blue', 'img' => 'icon-cuci-reguler.svg'],
+                ['name' => 'Cuci Kering Express', 'price' => '15.000', 'unit' => 'kg', 'desc' => 'Kilat 6 jam selesai', 'icon' => 'fa-bolt', 'color' => 'amber', 'img' => 'icon-cuci-express.svg'],
+                ['name' => 'Cuci Setrika', 'price' => '12.000', 'unit' => 'kg', 'desc' => 'Bersih + Rapi', 'icon' => 'fa-shirt', 'color' => 'emerald', 'img' => 'icon-cuci-setrika.svg'],
+                ['name' => 'Setrika Saja', 'price' => '6.000', 'unit' => 'kg', 'desc' => 'Setrika pakaian', 'icon' => 'fa-fire', 'color' => 'purple', 'img' => 'icon-setrika.svg'],
+                ['name' => 'Dry Cleaning', 'price' => '25.000', 'unit' => 'kg', 'desc' => 'Untuk pakaian premium', 'icon' => 'fa-star', 'color' => 'rose', 'img' => 'icon-dry-cleaning.svg'],
+                ['name' => 'Cuci Sepatu', 'price' => '35.000', 'unit' => 'pcs', 'desc' => 'Bersih seperti baru', 'icon' => 'fa-shoe-prints', 'color' => 'orange', 'img' => 'icon-cuci-sepatu.svg'],
+
+
             ];
+
+
             @endphp
             
             @foreach($services as $service)
             <div class="group glass-card rounded-3xl p-8 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 animate-on-scroll">
                 <div class="w-16 h-16 mb-6 bg-{{ $service['color'] }}-100 dark:bg-{{ $service['color'] }}-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    @if($service['name'] === 'Cuci Sepatu')
-    <img src="{{ asset('images/icon-shoe.svg') }}" class="w-8 h-8 dark:invert" alt="Sepatu">
-@else
-    <i class="fas {{ $service['icon'] }} text-{{ $service['color'] }}-600 dark:text-{{ $service['color'] }}-400 text-2xl"></i>
-@endif
+                    @if(!empty($service['img']))
+                        <img src="{{ asset('images/' . $service['img']) }}" class="w-10 h-10" alt="{{ $service['name'] }}">
+                    @else
+                        <i class="fas {{ $service['icon'] }} text-{{ $service['color'] }}-600 dark:text-{{ $service['color'] }}-400 text-2xl"></i>
+                    @endif
+
+
+
                 </div>
+
+
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $service['name'] }}</h3>
                 <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">{{ $service['desc'] }}</p>
                 <div class="flex items-baseline gap-1 mb-6">
@@ -308,12 +317,11 @@
 
 <!-- Chatbot Widget (Home Page) -->
 @php($isAuthed = auth()->check())
-<div id="chat-widget" class="fixed bottom-6 right-6 z-50" data-authed="{{ $isAuthed ? '1' : '0' }}">
+<div id="chat-widget" class="fixed z-50 cursor-grab" style="right: 1.5rem; bottom: 1.5rem; touch-action: none;" data-authed="{{ $isAuthed ? '1' : '0' }}">
     <!-- Tombol Chat -->
     <button
         id="chat-btn"
         type="button"
-        onclick="toggleChat()"
         class="w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl hover:scale-110 transition-transform duration-300 flex items-center justify-center relative"
         aria-label="Open chat"
     >
@@ -508,6 +516,215 @@
             localStorage.setItem('chat_seen', 'true');
         }
     }, 5000);
+
+    // ==================== DRAGGABLE CHAT WIDGET (HORIZONTAL ONLY) ====================
+    (function(){
+        var w = document.getElementById('chat-widget');
+        var b = document.getElementById('chat-btn');
+        var box = document.getElementById('chat-box');
+        if(!w || !b) return;
+
+        var drag = false, moved = false, sx, sy, sl, st;
+        var navbarHeight = 80;
+        var minY = navbarHeight + 10;
+
+        // Chat box horizontal positioning only
+        function positionChatBox(){
+            if(!box) return;
+            var pos = w.getAttribute('data-position') || 'right';
+
+            // bottom always aligned with button
+            box.style.bottom = '0';
+
+            // Size tweaks (fix too-wide / too-tall)
+            box.style.width = '320px';
+            box.style.maxHeight = '420px';
+
+            // Clear previous positioning
+            box.style.left = 'auto';
+            box.style.right = 'auto';
+            box.style.transform = '';
+
+            // IMPORTANT: if button is on right, chat box must appear on LEFT (shift left)
+            // If button is on left, chat box must appear on RIGHT (shift right)
+            if(pos === 'right'){
+                // align box to the top/left reference, then shift left by (box width + gap)
+                box.style.right = '0';
+                box.style.left = 'auto';
+                box.style.transform = 'translateX(calc(-100% - 10px))';
+            } else { // pos === 'left'
+                box.style.left = '0';
+                box.style.right = 'auto';
+                box.style.transform = 'translateX(calc(100% + 10px))';
+            }
+
+            // Prevent overflow on small screens
+            var vw = window.innerWidth;
+            var maxBox = vw - 48; // 24px padding each side approx
+            if(maxBox < 320){
+                box.style.width = maxBox + 'px';
+            }
+        }
+
+
+
+        function setDefaultPosition(){
+            w.style.right = '24px';
+            w.style.left = 'auto';
+            w.style.bottom = '24px';
+            w.style.top = 'auto';
+            w.setAttribute('data-position', 'right');
+            positionChatBox();
+        }
+
+        function snapToEdge(){
+            var rect = w.getBoundingClientRect();
+            var vw = window.innerWidth;
+
+            var distLeft = rect.left;
+            var distRight = vw - rect.right;
+            var minDist = Math.min(distLeft, distRight);
+
+            w.style.transition = 'all 0.3s ease-out';
+
+            // keep Y within boundary
+            var currentTop = rect.top;
+            var maxY = window.innerHeight - w.offsetHeight;
+            var snappedTop = Math.max(minY, Math.min(currentTop, maxY));
+
+            if(minDist === distLeft){
+                w.style.left = '24px';
+                w.style.right = 'auto';
+                w.style.top = snappedTop + 'px';
+                w.style.bottom = 'auto';
+                w.setAttribute('data-position','left');
+            } else {
+                w.style.right = '24px';
+                w.style.left = 'auto';
+                w.style.top = snappedTop + 'px';
+                w.style.bottom = 'auto';
+                w.setAttribute('data-position','right');
+            }
+
+            setTimeout(function(){
+                w.style.transition = '';
+                positionChatBox();
+            }, 300);
+
+            localStorage.setItem('chat_pos', JSON.stringify({
+                left: w.style.left,
+                right: w.style.right,
+                top: w.style.top,
+                bottom: w.style.bottom,
+                position: w.getAttribute('data-position')
+            }));
+        }
+
+        // Load posisi tersimpan (reset jika top/bottom mode lama)
+        var saved = localStorage.getItem('chat_pos');
+        if(saved){
+            try {
+                var p = JSON.parse(saved);
+                if(p.position === 'top' || p.position === 'bottom'){
+                    setDefaultPosition();
+                } else {
+                    w.style.left = p.left || 'auto';
+                    w.style.right = p.right || '24px';
+                    w.style.top = p.top || (minY + 'px');
+                    w.style.bottom = 'auto';
+                    w.setAttribute('data-position', p.position || 'right');
+                    positionChatBox();
+                }
+            } catch(e){
+                setDefaultPosition();
+            }
+        } else {
+            setDefaultPosition();
+        }
+
+        function startDrag(e){
+            if(box && !box.classList.contains('hidden')) return;
+
+            drag = true;
+            moved = false;
+
+            var cx = e.touches ? e.touches[0].clientX : e.clientX;
+            var cy = e.touches ? e.touches[0].clientY : e.clientY;
+
+            sx = cx;
+            sy = cy;
+            sl = w.offsetLeft;
+            st = w.offsetTop;
+
+            w.classList.add('dragging');
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function doDrag(e){
+            if(!drag) return;
+
+            var cx = e.touches ? e.touches[0].clientX : e.clientX;
+            var cy = e.touches ? e.touches[0].clientY : e.clientY;
+
+            var dx = cx - sx;
+            var dy = cy - sy;
+
+            if(Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+
+            var nl = sl + dx;
+            var nt = st + dy;
+
+            var maxX = window.innerWidth - w.offsetWidth;
+            var maxY = window.innerHeight - w.offsetHeight;
+
+            // X free
+            w.style.left = Math.max(0, Math.min(nl, maxX)) + 'px';
+            w.style.right = 'auto';
+
+            // Y boundary: not above navbar area
+            w.style.top = Math.max(minY, Math.min(nt, maxY)) + 'px';
+            w.style.bottom = 'auto';
+
+            // update immediate horizontal chat positioning based on side
+            var rect = w.getBoundingClientRect();
+            var distLeft = rect.left;
+            var distRight = window.innerWidth - rect.right;
+            w.setAttribute('data-position', (distLeft <= distRight) ? 'left' : 'right');
+            positionChatBox();
+
+            e.preventDefault();
+        }
+
+        function endDrag(){
+            if(!drag) return;
+            drag = false;
+            w.classList.remove('dragging');
+
+            snapToEdge();
+        }
+
+        b.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', doDrag);
+        document.addEventListener('mouseup', endDrag);
+
+        b.addEventListener('touchstart', startDrag, {passive: false});
+        document.addEventListener('touchmove', doDrag, {passive: false});
+        document.addEventListener('touchend', endDrag);
+
+        b.addEventListener('click', function(e){
+            if(moved) {
+                moved = false;
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            toggleChat();
+        });
+
+    })();
+    // ==================== END DRAGGABLE ====================
 </script>
 @endpush
 @endsection
