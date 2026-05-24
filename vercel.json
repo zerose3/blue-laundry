@@ -8,7 +8,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_KEY": "base64:YOUR_APP_KEY_HERE",
+        "APP_KEY": "base64:9+W0M4YaAhoNGN5tjaTiIOKGA0QGyMVzxaotMwVUiEY=",
         "APP_URL": "https://blue-laundry.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
